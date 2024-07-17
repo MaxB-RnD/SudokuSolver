@@ -10,7 +10,7 @@ pygame.font.init()
 
 # CREATE A GRID OBJECT/BOARD SPACE
 class Grid:
-    # INITALISE THE SUDOKU GRID
+    # INITIALISE THE SUDOKU GRID
     def __init__(self, rows, cols, width, height, win):
         self.rows = rows
         self.cols = cols
@@ -41,19 +41,24 @@ class Grid:
         # Place Value in Cube
         row, col = self.selected
 
-        # Check Value is Valid
+        # Check if Value is Empty
         if self.cubes[row][col].value == 0:
             # Set Square to Value
             self.cubes[row][col].set(num)
             self.update_model()
             return True
+            
+        # If Value is Not Empty Don't Allow Chnage
         else:
             return False
 
     
     # SOLVE THE CURRENT BOARD
     def solve(self):
+        # Update the Internal Board
         self.update_model()
+
+        # If the Board Solves Update the Board
         if solve(self.model):
             self.update_board()
             return True
@@ -63,6 +68,7 @@ class Grid:
     
     # UPDATE THE BOARD TO REFLECT THE SOLVED STATE
     def update_board(self):
+        # Transfer the Solve State Board to the GUI
         for i in range(self.rows):
             for j in range(self.cols):
                 if self.cubes[i][j].value == 0:
@@ -72,15 +78,23 @@ class Grid:
     
     # DRAW THE GRID AND CUBES
     def draw(self):
+        # Define Grid Size
         gap = self.width / 9
+
+        # Set Line Thickness
         for i in range(self.rows + 1):
+            # Box Edge Line
             if i % 3 == 0 and i != 0:
                 thick = 4
+            # Normal Line
             else:
                 thick = 1
+                
+            # Draw the Line on the Board
             pygame.draw.line(self.win, (0, 0, 0), (0, i * gap), (self.width, i * gap), thick)
             pygame.draw.line(self.win, (0, 0, 0), (i * gap, 0), (i * gap, self.height), thick)
 
+        # Draw the Value in the Cube
         for i in range(self.rows):
             for j in range(self.cols):
                 self.cubes[i][j].draw(self.win)
@@ -88,27 +102,36 @@ class Grid:
     
     # SELECT A CUBE
     def select(self, row, col):
+        # Loop Through the Entire Board
         for i in range(self.rows):
             for j in range(self.cols):
                 self.cubes[i][j].selected = False
+                
+        # Select the Current Square to Take an Input Value
         self.cubes[row][col].selected = True
         self.selected = (row, col)
 
     
     # GET POSITION OF CLICKED CUBE
     def click(self, pos):
+        # Bounds Check the Click
         if pos[0] < self.width and pos[1] < self.height:
+            # Return the Co-ordinates
             gap = self.width / 9
             x = pos[0] // gap
             y = pos[1] // gap
             return (int(y), int(x))
         else:
+            # Return Nothing if Out of Bounds
             return None
 
     
     # CLEAR THE TEMPORARY VALUE IN A CUBE
     def clear(self):
+        # Select the Row and Col
         row, col = self.selected
+
+        # Check Cube is Not empty Return Value
         if self.cubes[row][col].value == 0:
             self.cubes[row][col].set_temp(0)
 
@@ -121,10 +144,14 @@ class Grid:
     
     # CHECK IF THE BOARD IS COMPLETED
     def is_finished(self):
+        # Loop Through Board
         for i in range(self.rows):
             for j in range(self.cols):
+                # Look for Empty Squares
                 if self.cubes[i][j].value == 0:
                     return False
+
+        # No Empty Squares Board is Complete
         return True
 
 
@@ -200,15 +227,16 @@ def redraw_window(win, board):
 
 
 
-
 # MAIN FUNCTION TO RUN THE SUDOKU SOLVER GUI
 def main():
+    # Initalise the Game Board
     win = pygame.display.set_mode((540,600))
     pygame.display.set_caption("Sudoku Solver")
     board = Grid(9, 9, 540, 540, win)
     key = None
     run = True
 
+    # Game Run Loop
     while run:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -233,6 +261,7 @@ def main():
                 if event.key == pygame.K_9:
                     key = 9
                 if event.key == pygame.K_RETURN:
+                    # Board is Ready to Be Solved
                     i, j = board.selected
                     if board.cubes[i][j].temp != 0:
                         if board.place(board.cubes[i][j].temp):
