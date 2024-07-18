@@ -122,6 +122,13 @@ class Grid:
         else:
             return None
 
+    def clear_board(self):
+        for i in range(self.rows):
+            for j in range(self.cols):
+                self.cubes[i][j].set(0)
+        self.update_model()
+
+
 # Main Function
 def main():
     # Initialize Pygame Window
@@ -163,6 +170,11 @@ def main():
                     key = 8
                 if event.key == pygame.K_9:
                     key = 9
+
+                # Reset the board (clear all values)
+                elif event.key == pygame.K_r:
+                    board.clear_board()
+                    key = None
                 
                # Delete the Current Value of the Cube or Move Back a Square
                 elif event.key == pygame.K_BACKSPACE:
