@@ -1,134 +1,15 @@
-import pygame
-import time
-from solver import solve, valid, find_empty  
-
+# GUI MAIN CODE FOR RUNNING THE UX SUDOKU SOLVER
+from Grid import *
 pygame.font.init()
 
-# Define Cube Class
-class Cube:
-    rows = 9
-    cols = 9
+    
+# Redraw Pygame Window
+def redrawWindow(win, board, reset):
+    win.fill((255, 255, 255))
+    board.draw(reset)
+    pygame.display.update()
 
-    def __init__(self, value, row, col, width, height):
-        self.value = value
-        self.row = row
-        self.col = col
-        self.width = width
-        self.height = height
-        self.selected = False
-        self.temp = 0
-        self.is_solved = False
-
-    def draw(self, win):
-        fnt = pygame.font.SysFont("comicsans", 40)
-        gap = self.width / 9
-        x = self.col * gap
-        y = self.row * gap
-
-        # Draw background
-        pygame.draw.rect(win, (255, 255, 255), (x, y, gap, gap))
-
-        # Only render the text if self.value is not zero
-        if self.value != 0:
-            color = (128, 128, 128) if self.is_solved else (0, 0, 0)
-            text = fnt.render(str(self.value), 1, color)
-            win.blit(text, (x + (gap / 2 - text.get_width() / 2), y + (gap / 2 - text.get_height() / 2)))
-
-        if self.selected:
-            pygame.draw.rect(win, (0, 68, 193), (x, y, gap, gap), 3)
-
-    def draw_change(self, win, g=True):
-        fnt = pygame.font.SysFont("comicsans", 40)
-        gap = self.width / 9
-        x = self.col * gap
-        y = self.row * gap
-
-        pygame.draw.rect(win, (255, 255, 255), (x, y, gap, gap))
-        text = fnt.render(str(self.value), 1, (0, 0, 0))
-        win.blit(text, (x + (gap / 2 - text.get_width() / 2), y + (gap / 2 - text.get_height() / 2)))
-
-    def set(self, val, is_solved=False):
-        self.value = val
-        self.is_solved = is_solved
-
-# Define Grid Class
-class Grid:
-    rows = 9
-    cols = 9
-
-    def __init__(self, rows, cols, width, height, win):
-        self.rows = rows
-        self.cols = cols
-        self.width = width
-        self.height = height
-        self.model = None
-        self.cubes = [[Cube(0, i, j, width, height) for j in range(cols)] for i in range(rows)]
-        self.update_model()
-        self.selected = None
-        self.win = win
-
-    def update_model(self):
-        self.model = [[self.cubes[i][j].value for j in range(self.cols)] for i in range(self.rows)]
-
-    def place(self, num):
-        row, col = self.selected
-        if self.cubes[row][col].value == 0:
-            self.cubes[row][col].set(num)
-            self.update_model()
-            return True
-        else:
-            return False
-
-    def solve(self):
-        self.update_model()
-        if solve(self.model):
-            self.update_board()
-            return True
-        else:
-            return False
-
-    def update_board(self):
-        for i in range(self.rows):
-            for j in range(self.cols):
-                if self.cubes[i][j].value == 0:
-                    self.cubes[i][j].set(self.model[i][j], is_solved=True)
-                    self.cubes[i][j].draw_change(self.win, False)
-
-    def draw(self):
-        gap = self.width / 9
-        for i in range(self.rows):
-            for j in range(self.cols):
-                self.cubes[i][j].draw(self.win)
-
-        # Draw gridlines
-        for i in range(self.rows + 1):
-            thick = 4 if i % 3 == 0 and i != 0 else 1
-            pygame.draw.line(self.win, (0, 0, 0), (0, i * gap), (self.width, i * gap), thick)
-            pygame.draw.line(self.win, (0, 0, 0), (i * gap, 0), (i * gap, self.height), thick)
-
-    def select(self, row, col):
-        for i in range(self.rows):
-            for j in range(self.cols):
-                self.cubes[i][j].selected = False
-        self.cubes[row][col].selected = True
-        self.selected = (row, col)
-
-    def click(self, pos):
-        if pos[0] < self.width and pos[1] < self.height:
-            gap = self.width / 9
-            x = pos[0] // gap
-            y = pos[1] // gap
-            return (int(y), int(x))
-        else:
-            return None
-
-    def clear_board(self):
-        for i in range(self.rows):
-            for j in range(self.cols):
-                self.cubes[i][j].set(0)
-        self.update_model()
-
-
+    
 # Main Function
 def main():
     # Initialize Pygame Window
@@ -138,6 +19,7 @@ def main():
     key = None
     run = True
     firstPass = True
+    reset = False
 
     # Main Game Loop
     while run:
@@ -173,7 +55,9 @@ def main():
 
                 # Reset the board (clear all values)
                 elif event.key == pygame.K_r:
-                    board.clear_board()
+                    reset = False
+                    board.clearBoard()
+                    board.select(0, 0)
                     key = None
                 
                # Delete the Current Value of the Cube or Move Back a Square
@@ -199,6 +83,7 @@ def main():
                 
                 # Solve the Board
                 if event.key == pygame.K_RETURN:
+                    reset = True
                     # If the Board is Not Solvable
                     if not board.solve():
                         print("Board is Unsolvable")
@@ -208,7 +93,8 @@ def main():
                         pygame.display.update()
                         pygame.time.delay(2000)
                     else:
-                        board.update_board()  # Update board with solved values
+                        board.updateBoard()  # Update board with solved values
+                        board.select(0,0)
 
                 # Tab the Square from Left to Right
                 if event.key == pygame.K_TAB:
@@ -236,7 +122,7 @@ def main():
         if board.selected and key is not None:
             board.place(key)
 
-        redraw_window(win, board)
+        redrawWindow(win, board, reset)
         pygame.display.update()
 
     pygame.quit()
@@ -244,4 +130,3 @@ def main():
 # Run Main Function if Script is Executed Directly
 if __name__ == "__main__":
     main()
-
