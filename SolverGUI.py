@@ -262,8 +262,10 @@ def main():
                 if event.key == pygame.K_9:
                     key = 9
                 if event.key == pygame.K_RETURN:
+                    if board.selected:
                     # Board is Ready to Be Solved
                     i, j = board.selected
+                    
                     if board.cubes[i][j].temp != 0:
                         if board.place(board.cubes[i][j].temp):
                             print("Success")
@@ -273,7 +275,12 @@ def main():
 
                         if board.is_finished():
                             print("Game over")
-
+                   
+                    # Solve the Sudoku Puzzle for All Numbers Currently on the Board
+                    if board.solve():
+                        # Update the Board to Reflect the Solved State
+                        board.update_board()
+            
             # If a Square is Clicked
             if event.type == pygame.MOUSEBUTTONDOWN:
                 pos = pygame.mouse.get_pos()
