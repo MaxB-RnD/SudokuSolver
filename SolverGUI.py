@@ -168,8 +168,13 @@ def main():
                     key = 8
                 if event.key == pygame.K_9:
                     key = 9
+                
+                # Delete the Current Value of the Cube
                 if event.key == pygame.K_BACKSPACE:
-                    key = 0
+                  if board.selected:
+                    i, j = board.selected
+                    board.cubes[i][j].set(0)  # Clear the Value
+                    key = None
                     
                 # Tab the Square from Left to Right
                  if event.key == pygame.K_TAB:
@@ -184,7 +189,7 @@ def main():
                             else:
                                 i = 0
                         board.select(i, j)
-                                    
+                            33        
                 # Mouse Click Handling
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     pos = pygame.mouse.get_pos()
