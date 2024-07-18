@@ -104,11 +104,13 @@ class Cube:
         x = self.col * gap
         y = self.row * gap
 
-        text = fnt.render(str(self.value), 1, (0, 0, 0))
-        win.blit(text, (x + (gap / 2 - text.get_width() / 2), y + (gap / 2 - text.get_height() / 2)))
+        # Only render the text if self.value is not zero
+        if self.value != 0:
+            text = fnt.render(str(self.value), 1, (0, 0, 0))
+            win.blit(text, (x + (gap / 2 - text.get_width() / 2), y + (gap / 2 - text.get_height() / 2)))
 
         if self.selected:
-            pygame.draw.rect(win, (0, 172, 193), (x, y, gap, gap), 3)
+            pygame.draw.rect(win, (0, 68, 204), (x, y, gap, gap), 3)
 
     def draw_change(self, win, g=True):
         fnt = pygame.font.SysFont("comicsans", 40)
@@ -132,10 +134,17 @@ def main():
     board = Grid(9, 9, 540, 540, win)
     key = None
     run = True
+    firstPass = True
 
     # Main Game Loop
     while run:
         for event in pygame.event.get():
+            # Select Top Square To Begin
+            if firstPass == True:
+              board.select(0, 0)
+              firstPass = False
+
+            # Quit the Game When Selected to Quit
             if event.type == pygame.QUIT:
                 run = False
 
@@ -159,28 +168,42 @@ def main():
                     key = 8
                 if event.key == pygame.K_9:
                     key = 9
-                if event.key == pygame.K_RETURN:
+                if event.key == pygame.K_BACKSPACE:
+                    key = 0
+                    
+                # Tab the Square from Left to Right
+                 if event.key == pygame.K_TAB:
                     if board.selected:
                         i, j = board.selected
-                        if board.place(key):
-                            key = None
+                        if j < board.cols - 1:
+                            j += 1
+                        else:
+                            j = 0
+                            if i < board.rows - 1:
+                                i += 1
+                            else:
+                                i = 0
+                        board.select(i, j)
+                                    
+                # Mouse Click Handling
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    pos = pygame.mouse.get_pos()
+                    clicked = board.click(pos)
+                    if clicked:
+                        board.select(clicked[0], clicked[1])
+                        key = None
+                
+                # Solve the Board
+                if event.key == pygame.K_RETURN:
+                    # If the Board is Not Solvable
+                    #if not board.solve():
+                        #print("Board is Unsolvable")
+                        #font = pygame.font.SysFont("comicsans", 60)
+                        #text = font.render("Unsolvable!", 1, (255, 0, 0))
+                        #win.blit(text, (540 // 2 - text.get_width() // 2, 540 // 2 - text.get_height() // 2))
+                        #pygame.display.update()
+                        #pygame.time.delay(2000)
 
-                if event.key == pygame.K_SPACE:
-                    if not board.solve():
-                        print("Board is Unsolvable")
-                        font = pygame.font.SysFont("comicsans", 60)
-                        text = font.render("Unsolvable!", 1, (255, 0, 0))
-                        win.blit(text, (540 // 2 - text.get_width() // 2, 540 // 2 - text.get_height() // 2))
-                        pygame.display.update()
-                        pygame.time.delay(2000)
-
-            # Mouse Click Handling
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                pos = pygame.mouse.get_pos()
-                clicked = board.click(pos)
-                if clicked:
-                    board.select(clicked[0], clicked[1])
-                    key = None
 
         if board.selected and key is not None:
             board.place(key)
