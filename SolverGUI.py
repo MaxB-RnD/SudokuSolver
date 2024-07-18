@@ -4,6 +4,53 @@ from solver import solve, valid, find_empty
 
 pygame.font.init()
 
+# Define Cube Class
+class Cube:
+    rows = 9
+    cols = 9
+
+    def __init__(self, value, row, col, width, height):
+        self.value = value
+        self.row = row
+        self.col = col
+        self.width = width
+        self.height = height
+        self.selected = False
+        self.temp = 0
+        self.is_solved = False
+
+    def draw(self, win):
+        fnt = pygame.font.SysFont("comicsans", 40)
+        gap = self.width / 9
+        x = self.col * gap
+        y = self.row * gap
+
+        # Draw background
+        pygame.draw.rect(win, (255, 255, 255), (x, y, gap, gap))
+
+        # Only render the text if self.value is not zero
+        if self.value != 0:
+            color = (128, 128, 128) if self.is_solved else (0, 0, 0)
+            text = fnt.render(str(self.value), 1, color)
+            win.blit(text, (x + (gap / 2 - text.get_width() / 2), y + (gap / 2 - text.get_height() / 2)))
+
+        if self.selected:
+            pygame.draw.rect(win, (0, 68, 193), (x, y, gap, gap), 3)
+
+    def draw_change(self, win, g=True):
+        fnt = pygame.font.SysFont("comicsans", 40)
+        gap = self.width / 9
+        x = self.col * gap
+        y = self.row * gap
+
+        pygame.draw.rect(win, (255, 255, 255), (x, y, gap, gap))
+        text = fnt.render(str(self.value), 1, (0, 0, 0))
+        win.blit(text, (x + (gap / 2 - text.get_width() / 2), y + (gap / 2 - text.get_height() / 2)))
+
+    def set(self, val, is_solved=False):
+        self.value = val
+        self.is_solved = is_solved
+
 # Define Grid Class
 class Grid:
     rows = 9
@@ -44,22 +91,20 @@ class Grid:
         for i in range(self.rows):
             for j in range(self.cols):
                 if self.cubes[i][j].value == 0:
-                    self.cubes[i][j].set(self.model[i][j])
+                    self.cubes[i][j].set(self.model[i][j], is_solved=True)
                     self.cubes[i][j].draw_change(self.win, False)
 
     def draw(self):
         gap = self.width / 9
-        for i in range(self.rows + 1):
-            if i % 3 == 0 and i != 0:
-                thick = 4
-            else:
-                thick = 1
-            pygame.draw.line(self.win, (0, 0, 0), (0, i * gap), (self.width, i * gap), thick)
-            pygame.draw.line(self.win, (0, 0, 0), (i * gap, 0), (i * gap, self.height), thick)
-
         for i in range(self.rows):
             for j in range(self.cols):
                 self.cubes[i][j].draw(self.win)
+
+        # Draw gridlines
+        for i in range(self.rows + 1):
+            thick = 4 if i % 3 == 0 and i != 0 else 1
+            pygame.draw.line(self.win, (0, 0, 0), (0, i * gap), (self.width, i * gap), thick)
+            pygame.draw.line(self.win, (0, 0, 0), (i * gap, 0), (i * gap, self.height), thick)
 
     def select(self, row, col):
         for i in range(self.rows):
@@ -76,55 +121,6 @@ class Grid:
             return (int(y), int(x))
         else:
             return None
-
-    def is_finished(self):
-        for i in range(self.rows):
-            for j in range(self.cols):
-                if self.cubes[i][j].value == 0:
-                    return False
-        return True
-
-
-# Define Cube Class
-class Cube:
-    rows = 9
-    cols = 9
-
-    def __init__(self, value, row, col, width, height):
-        self.value = value
-        self.row = row
-        self.col = col
-        self.width = width
-        self.height = height
-        self.selected = False
-
-    def draw(self, win):
-        fnt = pygame.font.SysFont("comicsans", 40)
-        gap = self.width / 9
-        x = self.col * gap
-        y = self.row * gap
-
-        # Only render the text if self.value is not zero
-        if self.value != 0:
-            text = fnt.render(str(self.value), 1, (0, 0, 0))
-            win.blit(text, (x + (gap / 2 - text.get_width() / 2), y + (gap / 2 - text.get_height() / 2)))
-
-        if self.selected:
-            pygame.draw.rect(win, (0, 68, 204), (x, y, gap, gap), 3)
-
-    def draw_change(self, win, g=True):
-        fnt = pygame.font.SysFont("comicsans", 40)
-        gap = self.width / 9
-        x = self.col * gap
-        y = self.row * gap
-
-        pygame.draw.rect(win, (255, 255, 255), (x, y, gap, gap), 0)
-        text = fnt.render(str(self.value), 1, (0, 0, 0))
-        win.blit(text, (x + (gap / 2 - text.get_width() / 2), y + (gap / 2 - text.get_height() / 2)))
-
-    def set(self, val):
-        self.value = val
-
 
 # Main Function
 def main():
@@ -143,8 +139,7 @@ def main():
             if firstPass == True:
               board.select(0, 0)
               firstPass = False
-
-            # Quit the Game When Selected to Quit
+              
             if event.type == pygame.QUIT:
                 run = False
 
@@ -169,15 +164,42 @@ def main():
                 if event.key == pygame.K_9:
                     key = 9
                 
-                # Delete the Current Value of the Cube
-                if event.key == pygame.K_BACKSPACE:
-                  if board.selected:
-                    i, j = board.selected
-                    board.cubes[i][j].set(0)  # Clear the Value
-                    key = None
-                    
+               # Delete the Current Value of the Cube or Move Back a Square
+                elif event.key == pygame.K_BACKSPACE:
+                    if board.selected:
+                        i, j = board.selected
+                        # If cube is not empty, clear the value
+                        if board.cubes[i][j].value != 0:  
+                            board.cubes[i][j].set(0)
+                        # If cube is empty, move selection back
+                        else:  
+                            if j > 0:
+                                j -= 1
+                            else:
+                                j = board.cols - 1
+                                if i > 0:
+                                    i -= 1
+                                else:
+                                    i = board.rows - 1
+                            board.select(i, j)
+                        key = None
+
+                
+                # Solve the Board
+                if event.key == pygame.K_RETURN:
+                    # If the Board is Not Solvable
+                    if not board.solve():
+                        print("Board is Unsolvable")
+                        font = pygame.font.SysFont("comicsans", 60)
+                        text = font.render("Unsolvable!", 1, (255, 0, 0))
+                        win.blit(text, (540 // 2 - text.get_width() // 2, 540 // 2 - text.get_height() // 2))
+                        pygame.display.update()
+                        pygame.time.delay(2000)
+                    else:
+                        board.update_board()  # Update board with solved values
+
                 # Tab the Square from Left to Right
-                 if event.key == pygame.K_TAB:
+                if event.key == pygame.K_TAB:
                     if board.selected:
                         i, j = board.selected
                         if j < board.cols - 1:
@@ -189,26 +211,15 @@ def main():
                             else:
                                 i = 0
                         board.select(i, j)
-                            33        
-                # Mouse Click Handling
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    pos = pygame.mouse.get_pos()
-                    clicked = board.click(pos)
-                    if clicked:
-                        board.select(clicked[0], clicked[1])
-                        key = None
-                
-                # Solve the Board
-                if event.key == pygame.K_RETURN:
-                    # If the Board is Not Solvable
-                    #if not board.solve():
-                        #print("Board is Unsolvable")
-                        #font = pygame.font.SysFont("comicsans", 60)
-                        #text = font.render("Unsolvable!", 1, (255, 0, 0))
-                        #win.blit(text, (540 // 2 - text.get_width() // 2, 540 // 2 - text.get_height() // 2))
-                        #pygame.display.update()
-                        #pygame.time.delay(2000)
-
+                    key = None
+            
+            # Mouse Click Handling
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                pos = pygame.mouse.get_pos()
+                clicked = board.click(pos)
+                if clicked:
+                    board.select(clicked[0], clicked[1])
+                    key = None
 
         if board.selected and key is not None:
             board.place(key)
@@ -218,14 +229,7 @@ def main():
 
     pygame.quit()
 
-
-# Redraw Pygame Window
-def redraw_window(win, board):
-    win.fill((255, 255, 255))
-    board.draw()
-    pygame.display.update()
-
-
 # Run Main Function if Script is Executed Directly
 if __name__ == "__main__":
     main()
+
