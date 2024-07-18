@@ -193,7 +193,7 @@ class Cube:
 
         # Draw the Cube Borders
         if self.selected:
-            pygame.draw.rect(win, (255,0,0), (x,y, gap ,gap), 3)
+            pygame.draw.rect(win, (0,172,193), (x,y, gap ,gap), 3)
 
     
     # DRAW CHANGES TO THE CUBE WHEN TRANSITIONING TO SOLVED
@@ -230,7 +230,7 @@ def redraw_window(win, board):
 # MAIN FUNCTION TO RUN THE SUDOKU SOLVER GUI
 def main():
     # Initalise the Game Board
-    win = pygame.display.set_mode((540,600))
+    win = pygame.display.set_mode((540,540))
     pygame.display.set_caption("Sudoku Solver")
     board = Grid(9, 9, 540, 540, win)
     key = None
@@ -239,6 +239,7 @@ def main():
     # Game Run Loop
     while run:
         for event in pygame.event.get():
+            # Maintain Status of the Board
             if event.type == pygame.QUIT:
                 run = False
             if event.type == pygame.KEYDOWN:
@@ -272,19 +273,41 @@ def main():
 
                         if board.is_finished():
                             print("Game over")
+
+            # If a Square is Clicked
             if event.type == pygame.MOUSEBUTTONDOWN:
                 pos = pygame.mouse.get_pos()
                 clicked = board.click(pos)
                 if clicked:
                     board.select(clicked[0], clicked[1])
                     key = None
+
+            # If Tab is Pressed
+            if event.type == pygame.K_TAB:              
+                # Tab to the Left of the Board
+                if board.selected:
+                    i, j = board.selected
+                    if j < board.cols - 1:
+                        j += 1
+                    else:
+                        j = 0
+                        if i < board.rows - 1:
+                            i += 1
+                        else:
+                            i = 0
+        
+                    # Update Selected Cube
+                    board.select(i, j)
+                
+    
+            # When Space Bar is Pressed
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     if not board.solve():
-                        print("Board is unsolvable")
+                        print("Board is Unsolvable")
                         font = pygame.font.SysFont("comicsans", 60)
                         text = font.render("Unsolvable!", 1, (255, 0, 0))
-                        win.blit(text, (540 // 2 - text.get_width() // 2, 600 // 2 - text.get_height() // 2))
+                        win.blit(text, (540 // 2 - text.get_width() // 2, 540 // 2 - text.get_height() // 2))
                         pygame.display.update()
                         pygame.time.delay(2000)  # Display message for 2 seconds
 
