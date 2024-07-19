@@ -1,6 +1,6 @@
 # Sudoku Solver
-**Overview**
-- The Sudoku Solver is an interactive graphical application developed using Pygame, designed to solve and manage Sudoku puzzles. The application allows users to visually input and solve puzzles, providing a user-friendly interface for both beginners and enthusiasts.<br/><br/>
+**Overview**<br/>
+The Sudoku Solver is an interactive graphical application developed using Pygame, designed to solve and manage Sudoku puzzles. The application allows users to visually input and solve puzzles, providing a user-friendly interface for both beginners and enthusiasts.<br/><br/>
 
 
 **Features**
