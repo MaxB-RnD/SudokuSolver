@@ -1,32 +1,23 @@
 # Sudoku Solver
-**It is a period of intergalactic war; a lone survivor must defend his home from invading alien forces; The Talz, Mondoshawans and Helghast**<br/>
-
- A 2D space shooter game inspired by classic arcade shooters, featuring local leaderboards, cut scenes, varying difficulty settings, and power-ups. 
- This project was completed alongside three other team members using C++ and   SFML. The project included implementing local leaderboards to track 
- high scores, creating engaging cut scenes for enhanced storytelling, introducing multiple difficulty levels for diverse player skill sets, and 
- designing various power-ups for added excitement and strategic depth. The technical implementation utilised an object-oriented structure in C++ for 
- modularity and maintainability employed SFML for graphics rendering and user input handling, and incorporated collision detection and response systems 
- to manage interactions between players and enemy objects, ensuring smooth gameplay.<br/><br/><br/>
-
-
 **Overview**
-- This project is a 2-D space shooter game inspired by classic arcade shooters. It features engaging gameplay mechanics, local leaderboards, cut scenes, varying difficulty levels, and an array of power-ups to enhance the    player experience. The game was developed using C++ and SFML.<br/><br/>
+- The Sudoku Solver is an interactive graphical application developed using Pygame, designed to solve and manage Sudoku puzzles. The application allows users to visually input and solve puzzles, providing a user-friendly interface for both beginners and enthusiasts.<br/><br/>
 
 
 **Features**
-- **Engaging Gameplay:** The game offers fast-paced and exciting shooter action with responsive controls and challenging enemies.<br/>
-- **Local Leaderboards:** Players can compete for the highest score on local leaderboards, adding a competitive element to the game.<br/>
-- **Cut Scenes:** The game includes narrative cut scenes that provide context and enhance the overall experience.<br/>
-- **Difficulty Settings:** Players can choose from multiple difficulty levels, catering to both casual and hardcore gamers.<br/>
-- **Power-Ups:** Various power-ups are available throughout the game, offering temporary boosts and special abilities to the player.<br/><br/><br/>
-
+- **Graphical User Interface (GUI):** Developed an interactive Sudoku solver using Pygame, enabling users to input and solve puzzles visually.<br/>
+- **User Input Handling:** Implemented keyboard and mouse interactions for selecting cells, inputting numbers, and solving the puzzle.<br/>
+- **Backtracking Algorithm:** Applied the backtracking algorithm to efficiently solve Sudoku puzzles and provide solutions.<br/><br/><br/>
 
 **Technical Implementation**
- - **Object-Oriented Design:** The game is structured using object-oriented programming principles, ensuring modularity and ease of maintenance.<br/>
- - **Graphics Rendering:** SFML (Simple and Fast Multimedia Library) is used for graphics rendering, providing smooth and visually appealing animations.<br/>
- - **User Input Handling:** SFML is also utilized for handling user inputs, ensuring responsive and accurate control over the game character.<br/>
- - **Collision Detection:** The game includes robust collision detection and response systems for gameplay interactions, making sure that all in-game collisions are accurately processed.<br/>
- - **Sound Effects and Music:** The game features sound effects and background music to enhance the immersive experience.<br/><br/><br/>
+- **Pygame Library:** Utilized Pygame for GUI development, including window creation, event handling, and graphical updates.<br/>
+- **Event-Driven Programming:** Managed user inputs through event handling to facilitate interaction with the Sudoku board.<br/>
+- **Backtracking Algorithm:** Implemented a backtracking algorithm for solving Sudoku puzzles, demonstrating problem-solving and algorithm design skills.<br/>
+- **Data Structures:** Used appropriate data structures for managing and solving the Sudoku board, showcasing knowledge of optimization and complexity.<br/><br/><br/>
+
+**Skills Demonstrated**
+- Proficiency in using Pygame for GUI development and interactive applications.<br/>
+- Strong understanding of backtracking algorithms and their application to problem-solving.<br/>
+- Ability to manage user inputs and provide real-time feedback in a graphical environment.<br/><br/><br/>
 
 
 **Team**
