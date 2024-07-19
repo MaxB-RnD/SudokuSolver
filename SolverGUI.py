@@ -16,10 +16,34 @@ def main():
     win = pygame.display.set_mode((540, 540))
     pygame.display.set_caption("Sudoku Solver")
     board = Grid(9, 9, 540, 540, win)
-    key = None
-    run = True
-    firstPass = True
-    reset = False
+    key = None              # Current Key Press Value
+    run = True              # Main Game Loop Running Condition
+    instruction = True      # Display Instruction Screen
+    firstPass = True        # Start of New Game Condition
+    reset = False           # Enter has Been Pressed, Hide Square
+
+    # Instruction Screen Loop
+    while instruction:
+        # Display the Instruction Screen
+        for event in pygame.event.get():
+            # Load In Instruction Image
+            instructionImage = pygame.image.load('./Screens/Start2.jpg')
+            resizedImage = pygame.transform.scale(instructionImage, (540, 540))
+
+            # Dismiss the Screen when Space is Pressed
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    instruction = False
+            
+        # Clear the window
+        win.fill((255, 255, 255))  # Fill with white or any background color
+        
+        # Blit the image
+        win.blit(resizedImage, (0, 0))  # Adjust the position as neede
+
+        # Update the Display
+        pygame.display.update()
+
 
     # Main Game Loop
     while run:
