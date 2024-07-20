@@ -10,7 +10,7 @@ def findEmpty(board):
                 return (i, j)  # row, col
 
     # Return None if No Empty Cells are Found
-    return None
+    return False
 
 
 # CHECKS IF PLACING A NUMBER IN A SPECIFIC POSITION MAKES A VALID BOARD
@@ -39,7 +39,7 @@ def isValid(board, number, position):
 
 
 # FUNCTION THAT SOLVES THE GIVEN SUDOKU BOARD USING BACKTRACKING
-def solve(board):
+def solveSudoku(board):
     # Find the Next Empty Cell
     find = findEmpty(board)
     
@@ -50,18 +50,18 @@ def solve(board):
         row, col = find
 
     # Try Placing Numbers 1-9 in the Empty Cell
-    for number in range(1, 10):
-        # Check if Placing Num in (row, col) is Valid
-        if isValid(board, number, (row, col)):
-            # Place Num in the Cell
-            board[row][col] = number
+    for i in range(1, 10):
+        # Check if Placing Number in (row, col) is Valid
+        if isValid(board, i, (row, col)):
+            # Place Number in the Cell
+            board[row][col] = i
 
             # Recursively Try to Solve the Rest of the Board
-            if solve(board):
+            if solveSudoku(board):
                 return True
 
-            # If placing num doesn't lead to a solution, reset the cell
+            # If placing number doesn't lead to a solution, reset the cell
             board[row][col] = 0
 
-    # If No Number from 1-9 Leads to a Solution, Rturn False
+    # If No Number from 1-9 Leads to a Solution, Return False
     return False

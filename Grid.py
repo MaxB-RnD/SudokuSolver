@@ -44,10 +44,10 @@ class Grid:
     # SOLVE THE SUDOKU GRID
     def solve(self):
         # Update the Model to Match the Current Grid State
-        self.updateModel()   
+        self.updateModel() 
 
         # If the Solve Function Finds a Solution    
-        if solve(self.model):     
+        if solveSudoku(self.model): 
             # Update the Board to Reflect the Solution
             self.updateBoard()   
             return True
