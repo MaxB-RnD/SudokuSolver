@@ -38,6 +38,38 @@ def isValid(board, number, position):
     return True
 
 
+# A HELPER FUNCTION TO CHECK IF A 3 x 3 CUBE IS VAILD 
+def isValidBlock(block):
+        # Remove All Zeros (empty cells) From the Block
+        block = [num for num in block if num != 0]
+        
+        # Check if the Length of the Block Without Zeros is Equal to the Length of the Set of the Block
+        return len(block) == len(set(block))
+
+
+# FUNCTION THAT CHECKS IF THE FILLED BOARD IS VALID
+def isValidSudoku(board):
+    # Check All Rows
+    for row in board:
+        if not isValidBlock(row):
+            return False
+        
+    # Check All columns by Transposing the Board
+    for col in zip(*board):
+        if not isValidBlock(col):
+            return False
+        
+    # Check All 3x3 Sub-Grids
+    for i in (0, 3, 6):
+        for j in (0, 3, 6):
+            # Create a List of Elements in the Current 3x3 Sub-Grid
+            block = [board[x][y] for x in range(i, i + 3) for y in range(j, j + 3)]
+            if not isValidBlock(block):
+                return False
+
+    return True
+
+
 # FUNCTION THAT SOLVES THE GIVEN SUDOKU BOARD USING BACKTRACKING
 def solveSudoku(board):
     # Find the Next Empty Cell
@@ -45,7 +77,7 @@ def solveSudoku(board):
     
     # If There Are No Empty Cells, the Board is Solved
     if not find:
-        return True
+        return isValidSudoku(board)
     else:
         row, col = find
 
