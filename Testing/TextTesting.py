@@ -1,6 +1,7 @@
-# TESTING OF THE TEXT BASED SUDOKU SOLVER
+# TESTING OF THE TEXT-BASED SUDOKU SOLVER
 import sys
 import os
+
 
 # ADD THE PARENT DIRECTORY TO THE SYSTEM PATH
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
