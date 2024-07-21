@@ -1,6 +1,7 @@
 # CUBE CLASS FOR THE SUDOKU SOLVER WHICH MAKE UP THE 9 X 9 GRID
 import pygame
 
+
 # DEFINE THE CUBE CLASS
 class Cube:
     # Initialise Variables for the Cube class
