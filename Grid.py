@@ -2,6 +2,7 @@
 from Cubes import *  
 from Solver import *  
 
+
 # DEFINE THE GRID CLASS
 class Grid:
     # Initialise Variables for the Grid class
@@ -17,7 +18,7 @@ class Grid:
         self.height = height                                                                    # Height of the grid
         self.model = None                                                                       # Model representing the current state of the grid
         self.cubes = [[Cube(0, i, j, width, height) for j in range(cols)] for i in range(rows)] # 2D list of Cube objects
-        self.updateModel()                                                                     # Update the model to reflect the current grid state
+        self.updateModel()                                                                      # Update the model to reflect the current grid state
         self.selected = None                                                                    # Currently selected cube
         self.win = win                                                                          # Pygame window where the grid is drawn
 
