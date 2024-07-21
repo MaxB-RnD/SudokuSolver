@@ -105,9 +105,9 @@ def testGUISolver():
 
         # Print Sucess OR Fail
         if grid.solve():
-            print("Solved successfully!")
+            print("Solved Successfully!")
         else:
-            print("Board is unsolvable")
+            print("Board is Unsolvable")
 
         # Delay to View the Result
         pygame.time.delay(2000)  
