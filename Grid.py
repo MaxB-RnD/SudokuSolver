@@ -47,11 +47,15 @@ class Grid:
         # Update the Model to Match the Current Grid State
         self.updateModel() 
 
-        # If the Solve Function Finds a Solution    
-        if solveSudoku(self.model): 
-            # Update the Board to Reflect the Solution
-            self.updateBoard()   
-            return True
+        # Check that the Entered Board is Valid
+        if isValidSudoku(self.model):
+            # If the Solve Function Finds a Solution    
+            if solveSudoku(self.model): 
+                # Update the Board to Reflect the Solution
+                self.updateBoard()   
+                return True
+            else:
+                return False
         else:
             return False
 
