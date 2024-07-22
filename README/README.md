@@ -6,7 +6,7 @@ The Sudoku Solver is an interactive graphical application developed using Pygame
 **Features**
 - **Graphical User Interface (GUI):** Developed an interactive Sudoku solver using Pygame, enabling users to input and solve puzzles visually.<br/>
 - **User Input Handling:** Implemented keyboard and mouse interactions for selecting cells, inputting numbers, and solving the puzzle.<br/>
-- **Backtracking Algorithm:** Applied the backtracking algorithm to efficiently solve Sudoku puzzles, ensuring that even sparse but invalid boards are solved efficiently and provide sthe correct olutions.<br/><br/><br/>
+- **Backtracking Algorithm:** Applied the backtracking algorithm to efficiently solve Sudoku puzzles, ensuring that even sparse but invalid boards are solved efficiently and provide the correct solutions.<br/><br/><br/>
 
 **Technical Implementation**
 - **Pygame Library:** Utilized Pygame for GUI development, including window creation, event handling, and graphical updates.<br/>
