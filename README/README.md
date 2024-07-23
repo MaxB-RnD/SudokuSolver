@@ -33,7 +33,10 @@ The Sudoku Solver is an interactive graphical application developed using Pygame
  
 - **Build the Project:**
   - Ensure you have Python3 and Pygame installed on your system.<br/>
-  - Compile the project using your preferred IDE or build system, using python3 SolverGUI.py <br/><br/><br/>
+  - Compile the project using your preferred IDE or build system, using python3 SolverGUI.py <br/><br/>
+
+- **Executable Files:**
+  - Precompiled executable files are available for Windows and Linux.<br/><br/><br/>
 
 
 **Future Enhancement**
