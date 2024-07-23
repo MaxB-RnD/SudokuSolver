@@ -76,4 +76,4 @@ class Cube:
         self.value = val     
 
         # Update the Solved State      
-        self.is_solved = is_solved
+        self.is_solved = is_solved 

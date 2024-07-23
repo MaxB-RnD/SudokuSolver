@@ -1,6 +1,8 @@
 # GUI MAIN CODE FOR RUNNING THE UX SUDOKU SOLVER
 from Grid import *
 import pygame
+import os
+import sys
 pygame.font.init()
 
 
@@ -11,10 +13,22 @@ def redrawWindow(win, board, reset):
     pygame.display.update()
 
 
+# GET THE ABSOLUTE PATH TO A RESOURCE
+def resource_path(relative_path):
+    try:
+        # PyInstaller Creates a Temp Folder & Stores Path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
+
+
 # DISPLAY THE INSTRUCTION SCREEN
 def instructionScreen(win, instruction):
     # Load In Instruction Image
-    instructionImage = pygame.image.load('./Screens/Start_Screen.png')
+    screenPath = resource_path('./Screens/Start_Screen.png')
+    instructionImage = pygame.image.load(screenPath)
     resizedImage = pygame.transform.smoothscale(instructionImage, (540, 540))
 
     # Render the Image
@@ -83,7 +97,8 @@ def tab(board):
 # CONTROLS FOR BOARD SOLVING (RETURN KEY) FUNCTIONALITY
 def solveBoard(win, board, key, fail, reset):
     # Load In Unsolvable Image
-    unsolvableImage = pygame.image.load('./Screens/Unsolvable.png')
+    screenPath = resource_path('./Screens/Unsolvable.png')
+    unsolvableImage = pygame.image.load(screenPath)
     resizedImage = pygame.transform.smoothscale(unsolvableImage, (540, 540))
 
     # If the Board is Solvable
