@@ -23,7 +23,7 @@ class Cube:
     # DRAW THE CUBE ON THE PYGAME INTERFACE
     def draw(self, win, reset):
         # Set the Font
-        fnt = pygame.font.SysFont("comicsans", 40)  
+        fnt = pygame.font.SysFont("Aptos", 40)  
 
         # Calculate the Gap Between Cubes
         gap = self.width / 9   
@@ -55,7 +55,7 @@ class Cube:
     # DRAW CHANGES TO THE CUBE WHEN TRANSITIONING TO SOLVED
     def drawChange(self, win):
         # Set the Font
-        fnt = pygame.font.SysFont("comicsans", 40)  
+        fnt = pygame.font.SysFont("Aptos", 40)  
 
         # Calculate the Gap Between Cubes
         gap = self.width / 9    
